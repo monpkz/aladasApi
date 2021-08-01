@@ -10,13 +10,13 @@ import ar.com.ada.api.aladas.repos.AeropuertoRepository;
 
 @Service
 public class AeropuertoService {
-    
+
     @Autowired
     private AeropuertoRepository repo;
 
     // El crear este tiene que pasarle como parametro el aeropuertoId porque
     // en ESTE caso no es autoincremental.
-    public void crear(Integer aeropuertoId, String nombre, String codigoIATA){
+    public void crear(Integer aeropuertoId, String nombre, String codigoIATA) {
 
         Aeropuerto aeropuerto = new Aeropuerto();
         aeropuerto.setAeropuertoId(aeropuertoId);
@@ -28,5 +28,9 @@ public class AeropuertoService {
 
     public List<Aeropuerto> obtenerTodos() {
         return repo.findAll();
+    }
+
+    public Aeropuerto buscarPorCodigoIATA(String codigoIATA){
+        return repo.findByCodigoIATA(codigoIATA);
     }
 }

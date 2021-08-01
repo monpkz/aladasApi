@@ -28,5 +28,5 @@ public class AeropuertoController {
 
         return ResponseEntity.ok(respuesta);
     }
-    
+
 }
