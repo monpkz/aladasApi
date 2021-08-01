@@ -48,4 +48,37 @@ public class VueloService {
 
     }
 
+    public ValidacionVueloDataEnum validar(Vuelo vuelo) {
+
+        if (!validarPrecio(vuelo))
+            return ValidacionVueloDataEnum.ERROR_PRECIO;
+        if (!validarAeropuertoOrigenDiffDestino(vuelo))
+            return ValidacionVueloDataEnum.ERROR_AEROPUERTOS_IGUALES;
+
+        return ValidacionVueloDataEnum.OK;
+    }
+
+    public boolean validarPrecio(Vuelo vuelo) {
+
+        if (vuelo.getPrecio() == null) {
+            return false;
+        }
+        if (vuelo.getPrecio().doubleValue() > 0)
+            return true;
+        return false;
+    }
+
+    public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
+        /*
+         * if(vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen()) return true;
+         * else return false; PARA RECORDAR
+         */
+        return vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen();
+    }
+
+    public enum ValidacionVueloDataEnum {
+        OK, ERROR_PRECIO, ERROR_AEROPUERTO_ORIGEN, ERROR_AEROPUERTO_DESTINO, ERROR_FECHA, ERROR_MONEDA,
+        ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL
+    }
+
 }

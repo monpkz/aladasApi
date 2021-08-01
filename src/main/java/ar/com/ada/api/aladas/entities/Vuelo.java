@@ -28,7 +28,7 @@ public class Vuelo {
 
     private BigDecimal precio;
 
-    @Column(name = "codigo_moneda")
+    @Column(name = "codigo_moneda") // ARS, USD
     private String codigoMoneda;
 
     @OneToMany(mappedBy = "vuelo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -139,7 +139,5 @@ public class Vuelo {
             return status;
         }
     }
-    
-    
-}
 
+}
