@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ar.com.ada.api.aladas.entities.Aeropuerto;
 import ar.com.ada.api.aladas.entities.Vuelo;
+import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 import ar.com.ada.api.aladas.repos.VueloRepository;
 
 @Service
@@ -20,6 +21,7 @@ public class VueloService {
     private AeropuertoService aeropService;
 
     public void crear(Vuelo vuelo) {
+        vuelo.setEstadoVueloId(EstadoVueloEnum.GENERADO);
         repo.save(vuelo);
 
     }
@@ -81,4 +83,8 @@ public class VueloService {
         ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL
     }
 
+   /* public Vuelo buscarPorId(Integer id) {
+
+        return repo.findByVuelo(id);
+    }*/
 }

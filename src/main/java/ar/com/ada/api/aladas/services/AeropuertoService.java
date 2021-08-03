@@ -18,7 +18,7 @@ public class AeropuertoService {
     // en ESTE caso no es autoincremental.
     public void crear(Integer aeropuertoId, String nombre, String codigoIATA) {
 
-        Aeropuerto aeropuerto = new Aeropuerto();
+        Aeropuerto aeropuerto = new Aeropuerto(); // declara e instancia
         aeropuerto.setAeropuertoId(aeropuertoId);
         aeropuerto.setNombre(nombre);
         aeropuerto.setCodigoIATA(codigoIATA);
@@ -30,7 +30,25 @@ public class AeropuertoService {
         return repo.findAll();
     }
 
-    public Aeropuerto buscarPorCodigoIATA(String codigoIATA){
+    public Aeropuerto buscarPorCodigoIATA(String codigoIATA) {
         return repo.findByCodigoIATA(codigoIATA);
+    }
+
+    public static boolean validarCodigoIATA(Aeropuerto aeropuerto) {
+
+        // SI viene algo diferente de 3, que salga.
+        if (aeropuerto.getCodigoIATA().length() != 3)
+            return false;
+
+        String codigoIATA = aeropuerto.getCodigoIATA();
+
+        // " AP"
+        for (int i = 0; i < codigoIATA.length(); i++) {
+            char c = codigoIATA.charAt(i);
+
+            if (!(c >= 'A' && c <= 'Z'))
+                return false;
+        }
+        return true;
     }
 }
