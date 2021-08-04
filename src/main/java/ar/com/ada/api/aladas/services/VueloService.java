@@ -60,6 +60,7 @@ public class VueloService {
         return ValidacionVueloDataEnum.OK;
     }
 
+
     public boolean validarPrecio(Vuelo vuelo) {
 
         if (vuelo.getPrecio() == null) {
@@ -83,8 +84,22 @@ public class VueloService {
         ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL
     }
 
-   /* public Vuelo buscarPorId(Integer id) {
+    public Vuelo buscarPorId(Integer id) {
 
-        return repo.findByVuelo(id);
-    }*/
+        return repo.findByVueloId(id);
+    }
+
+    public void actualizar(Vuelo vuelo) {
+        
+        repo.save(vuelo);
+    }
+
+    public List<Vuelo> traerVuelosAbiertos() {
+        
+        return repo.findByEstadoVueloId(EstadoVueloEnum.ABIERTO.getValue());
+    }
+
+    public Vuelo buscarPorId() {
+        return null;
+    }
 }
