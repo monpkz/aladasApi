@@ -56,7 +56,8 @@ public class VueloService {
             return ValidacionVueloDataEnum.ERROR_PRECIO;
         if (!validarAeropuertoOrigenDiffDestino(vuelo))
             return ValidacionVueloDataEnum.ERROR_AEROPUERTOS_IGUALES;
-
+    //  if (!validarCapMaxima(vuelo))
+    //     return ValidacionVueloDataEnum.ERROR_CAPACIDAD_MAXIMA;
         return ValidacionVueloDataEnum.OK;
     }
 
