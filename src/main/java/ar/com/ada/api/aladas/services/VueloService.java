@@ -71,6 +71,15 @@ public class VueloService {
         return false;
     }
 
+    /* public boolean validarCapMaxima(Vuelo vuelo){
+        if (vuello.getCapacidad() <= 100){
+            return false;
+        }
+        if (vuelo.getCapacidad().getValue() == 100)
+            return true;
+        return false;
+    } */ //PENDIENTE PARA VER SI ESTA BIEN 
+    
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
         /*
          * if(vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen()) return true;

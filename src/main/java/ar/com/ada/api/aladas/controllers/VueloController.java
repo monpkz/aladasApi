@@ -13,6 +13,7 @@ import ar.com.ada.api.aladas.models.request.EstadoVueloRequest;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
 import ar.com.ada.api.aladas.services.AeropuertoService;
 import ar.com.ada.api.aladas.services.VueloService;
+import ar.com.ada.api.aladas.services.VueloService.ValidacionVueloDataEnum;
 
 @RestController
 public class VueloController {
@@ -39,16 +40,26 @@ public class VueloController {
     public ResponseEntity<GenericResponse> postCrearVuelo(@RequestBody Vuelo vuelo) {
         GenericResponse respuesta = new GenericResponse();
 
-        service.crear(vuelo);
+        ValidacionVueloDataEnum resultadoValidacion = service.validar(vuelo);
+        if (resultadoValidacion == ValidacionVueloDataEnum.OK) {
+            service.crear(vuelo);
 
-        respuesta.isOk = true;
-        respuesta.id = vuelo.getVueloId();
-        respuesta.message = "Vuelo creado correctamente";
+            respuesta.isOk = true;
+            respuesta.id = vuelo.getVueloId();
+            respuesta.message = "Vuelo creado correctamente";
 
-        return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(respuesta);
+        } else {
+            respuesta.isOk = false;
+            respuesta.message = "Error(" + resultadoValidacion.toString() + ")";
+
+            return ResponseEntity.badRequest().body(respuesta);
+        }
     }
 
     /*
+     * Version 2 Post
+     * 
      * @PostMapping("/api/v2/vuelos") public ResponseEntity<GenericResponse>
      * postCrearVueloV2(@RequestBody Vuelo vuelo) { GenericResponse respuesta = new
      * GenericResponse();
@@ -65,15 +76,20 @@ public class VueloController {
      * return ResponseEntity.ok(respuesta); }
      */
 
-    @PutMapping("/api/vuelos/{id}")
+    @PutMapping("/api/vuelos/{id}/estados")
     public ResponseEntity<GenericResponse> putActualizarEstadoVuelo(@PathVariable Integer id,
             @RequestBody EstadoVueloRequest estadoVuelo) {
         GenericResponse respuesta = new GenericResponse();
-        
+
+        // Pasos:
+        // 1- buscar vuelo por Id y lo asignamos a una variable ->(vuelo)
         Vuelo vuelo = service.buscarPorId(id);
+        // 2- setearle el nuevo estado, que vino en estadoVuelo
         vuelo.setEstadoVueloId(estadoVuelo.estado);
+        // 3- grabar el vuelo en la base de datos
         service.actualizar(vuelo);
 
+        // 4- devuelve el status final
         respuesta.isOk = true;
         respuesta.message = "Actualizado";
         respuesta.id = vuelo.getVueloId();
@@ -88,7 +104,7 @@ public class VueloController {
     }
 
     @DeleteMapping("/api/vuelos/{id}")
-    public ResponseEntity<GenericResponse>eliminar (@PathVariable Integer id){
+    public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id) {
 
         service.eliminar(id);
         GenericResponse respuesta = new GenericResponse();
