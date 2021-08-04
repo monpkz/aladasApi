@@ -5,4 +5,5 @@ import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 public class EstadoVueloRequest {
     public EstadoVueloEnum estado;
     public boolean isOk;
+    public Integer id;
 }

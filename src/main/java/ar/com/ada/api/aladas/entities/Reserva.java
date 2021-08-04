@@ -17,7 +17,7 @@ public class Reserva {
     private Vuelo vuelo;
 
     @ManyToOne
-    @JoinColumn(name = "pasajero:id", referencedColumnName = "pasajero_id")
+    @JoinColumn(name = "pasajero_id", referencedColumnName = "pasajero_id")
     private Pasajero pasajero;
 
     @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

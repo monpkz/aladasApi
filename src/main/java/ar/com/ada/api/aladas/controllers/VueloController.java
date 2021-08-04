@@ -69,14 +69,15 @@ public class VueloController {
     public ResponseEntity<GenericResponse> putActualizarEstadoVuelo(@PathVariable Integer id,
             @RequestBody EstadoVueloRequest estadoVuelo) {
         GenericResponse respuesta = new GenericResponse();
-        respuesta.isOk = true;
         
         Vuelo vuelo = service.buscarPorId(id);
         vuelo.setEstadoVueloId(estadoVuelo.estado);
         service.actualizar(vuelo);
 
-        
+        respuesta.isOk = true;
         respuesta.message = "Actualizado";
+        respuesta.id = vuelo.getVueloId();
+
         return ResponseEntity.ok(respuesta);
     }
 
@@ -84,6 +85,18 @@ public class VueloController {
     public ResponseEntity<List<Vuelo>> getVuelosAbiertos() {
 
         return ResponseEntity.ok(service.traerVuelosAbiertos());
+    }
+
+    @DeleteMapping("/api/vuelos/{id}")
+    public ResponseEntity<GenericResponse>eliminar (@PathVariable Integer id){
+
+        service.eliminar(id);
+        GenericResponse respuesta = new GenericResponse();
+
+        respuesta.isOk = true;
+        respuesta.message = "Vuelo eliminado con exito.";
+
+        return ResponseEntity.ok(respuesta);
     }
 
 }
