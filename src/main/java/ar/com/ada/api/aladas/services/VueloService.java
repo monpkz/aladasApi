@@ -56,8 +56,6 @@ public class VueloService {
             return ValidacionVueloDataEnum.ERROR_PRECIO;
         if (!validarAeropuertoOrigenDiffDestino(vuelo))
             return ValidacionVueloDataEnum.ERROR_AEROPUERTOS_IGUALES;
-    //  if (!validarCapMaxima(vuelo))
-    //     return ValidacionVueloDataEnum.ERROR_CAPACIDAD_MAXIMA;
         return ValidacionVueloDataEnum.OK;
     }
 
@@ -71,15 +69,6 @@ public class VueloService {
             return true;
         return false;
     }
-
-    /* public boolean validarCapMaxima(Vuelo vuelo){
-        if (vuello.getCapacidad() <= 100){
-            return false;
-        }
-        if (vuelo.getCapacidad().getValue() == 100)
-            return true;
-        return false;
-    } */ //PENDIENTE PARA VER SI ESTA BIEN 
     
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
         /*

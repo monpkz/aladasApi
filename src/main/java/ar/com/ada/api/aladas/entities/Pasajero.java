@@ -48,6 +48,4 @@ public class Pasajero extends Persona {
         reserva.setPasajero(this);
     }
 
-    
-    
 }
