@@ -10,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 
 import ar.com.ada.api.aladas.entities.Aeropuerto;
+import ar.com.ada.api.aladas.entities.Usuario;
 import ar.com.ada.api.aladas.entities.Vuelo;
 import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
+import ar.com.ada.api.aladas.security.Crypto;
 import ar.com.ada.api.aladas.services.AeropuertoService;
 import ar.com.ada.api.aladas.services.VueloService;
 import ar.com.ada.api.aladas.services.VueloService.ValidacionVueloDataEnum;
@@ -139,4 +141,29 @@ class AladasApplicationTests {
 
         assertEquals(ValidacionVueloDataEnum.ERROR_AEROPUERTOS_IGUALES, vueloService.validar(vuelo));
     }
+
+    @Test
+	void testearEncriptacion() {
+
+		String contraseñaImaginaria = "pitufosasesinos";
+		String contraseñaImaginariaEncriptada = Crypto.encrypt(contraseñaImaginaria, "palabra");
+
+		String contraseñaImaginariaEncriptadaDesencriptada = Crypto.decrypt(contraseñaImaginariaEncriptada, "palabra");
+
+		// assertTrue(contraseñaImaginariaEncriptadaDesencriptada.equals(contraseñaImaginaria));
+		assertEquals(contraseñaImaginariaEncriptadaDesencriptada, contraseñaImaginaria);
+	}
+
+	@Test
+	void testearContraseña() {
+		Usuario usuario = new Usuario();
+
+		usuario.setUsername("Diana@gmail.com");
+		usuario.setPassword("qp5TPhgUtIf7RDylefkIbw==");
+		usuario.setEmail("Diana@gmail.com");
+
+		assertFalse(!usuario.getPassword().equals(Crypto.encrypt("AbcdE23", usuario.getUsername().toLowerCase())));
+
+	}
+    
 }
