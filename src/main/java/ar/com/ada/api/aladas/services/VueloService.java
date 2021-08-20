@@ -118,13 +118,14 @@ public class VueloService {
         return repo.findByEstadoVueloId(EstadoVueloEnum.ABIERTO.getValue());
     }
 
-
-    public void eliminar(Integer id) {
-        Vuelo vuelo = this.buscarPorId(id);
-        repo.delete(vuelo);
-    }
-
     public List<Vuelo> obtenerTodos() {
         return repo.findAll();
+    }
+
+    public boolean validarVueloExiste(Integer id) {
+        if (buscarPorId(id) != null ){
+            return true;
+        } else
+            return false;
     }
 }

@@ -1,15 +1,21 @@
 package ar.com.ada.api.aladas.controllers;
 
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.ada.api.aladas.entities.Pasaje;
 import ar.com.ada.api.aladas.models.request.InfoPasajeNuevo;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
+import ar.com.ada.api.aladas.models.response.PasajeResponse;
 import ar.com.ada.api.aladas.services.PasajeService;
+import ar.com.ada.api.aladas.services.PasajeService.ValidacionPasajeDataEnum;
 
 @RestController
 public class PasajeController {
@@ -18,17 +24,38 @@ public class PasajeController {
     PasajeService service;
 
     @PostMapping("api/pasajes")
-    public ResponseEntity<GenericResponse> emitir(@RequestBody InfoPasajeNuevo infoPasajes) {
+    public ResponseEntity<?> emitir(@RequestBody InfoPasajeNuevo infoPasajes) {
 
-        GenericResponse respuesta = new GenericResponse();
+        PasajeResponse respuesta = new PasajeResponse();
 
-        Pasaje pasaje = service.emitir(infoPasajes.reservaId);
+        ValidacionPasajeDataEnum resultado = service.validar(infoPasajes.reservaId);
 
-        respuesta.message = "El pasaje ha sido generada correctamente.";
-        respuesta.isOk = true;
-        respuesta.id = pasaje.getPasajeId();
+        if (resultado == ValidacionPasajeDataEnum.OK) {
 
-        return ResponseEntity.ok(respuesta);
+            Pasaje pasaje = service.emitir(infoPasajes.reservaId);
+
+            respuesta.pasajeId = pasaje.getPasajeId();
+            respuesta.fechaDeEmision = pasaje.getFechaEmision();
+            respuesta.reservaId = pasaje.getReserva().getReservaId();
+            respuesta.vueloId = pasaje.getReserva().getVuelo().getVueloId();
+            respuesta.infoDePago = "PAGADO";
+            respuesta.message = "El pasaje ha sido emitido correctamente.";
+
+            return ResponseEntity.ok(respuesta);
+
+        } else{
+
+            GenericResponse rta = new GenericResponse();
+            rta.isOk = false;
+            rta.message = "Error(" + resultado.toString() + ")";
+
+            return ResponseEntity.badRequest().body(rta);
+        }
+    }
+
+    @GetMapping("/api/pasajes")
+    public ResponseEntity<List<Pasaje>> traerPasajes() {
+        return ResponseEntity.ok(service.obtenerTodos());
     }
 
 }
