@@ -29,6 +29,7 @@ public class PasajeService {
         reserva.setEstadoReservaId(EstadoReservaEnum.EMITIDA);
         reserva.asociarPasaje(pasaje);
         Integer nuevaCapacidad = reserva.getVuelo().getCapacidad() - 1;
+        reserva.getVuelo().setCapacidad(nuevaCapacidad);
 
         /*
          * problema concurrencia
