@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import ar.com.ada.api.aladas.controllers.sistema.comm.EmailService;
 import ar.com.ada.api.aladas.entities.*;
 import ar.com.ada.api.aladas.entities.Pais.PaisEnum;
 import ar.com.ada.api.aladas.entities.Pais.TipoDocuEnum;
@@ -27,6 +28,8 @@ public class UsuarioService {
     UsuarioRepository usuarioRepository;
     @Autowired
     PasajeroService pasajeroService;
+    @Autowired
+    EmailService emailService;
   
     public Usuario buscarPorUsername(String username) {
       return usuarioRepository.findByUsername(username);
@@ -82,7 +85,7 @@ public class UsuarioService {
         staffService.crearStaff(staff);
         
       }
-  
+      emailService.SendEmail(usuario.getEmail(), "Registracion Exitosa", "Bienvenido, ud ha sido registrado");
       // Todo!
       return usuario;
     }
