@@ -71,6 +71,7 @@ public class UsuarioService {
   
       } else { // en este caso, asumios que si no es pasajero es staff
         Staff staff = new Staff();
+
         staff.setDocumento(documento);
         staff.setPaisId(PaisEnum.parse(pais));
         staff.setFechaNacimiento(fechaNacimiento);
@@ -79,7 +80,6 @@ public class UsuarioService {
         staff.setUsuario(usuario);
   
         staffService.crearStaff(staff);
-  
         
       }
   

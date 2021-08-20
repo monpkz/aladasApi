@@ -36,7 +36,6 @@ public class Usuario {
     @JoinColumn(name = "pasajero_id", referencedColumnName = "pasajero_id")
     private Pasajero pasajero;
 
-
     public Integer getUsuarioId() {
         return usuarioId;
     }
@@ -101,8 +100,6 @@ public class Usuario {
         this.pasajero = pasajero;
     }
 
-    
-
     public enum TipoUsuarioEnum {
         STAFF(1), PASAJERO(2);
 
@@ -141,5 +138,5 @@ public class Usuario {
         }
         return null;
     }
-    
+
 }

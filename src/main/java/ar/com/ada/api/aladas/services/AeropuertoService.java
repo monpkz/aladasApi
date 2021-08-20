@@ -74,4 +74,8 @@ public class AeropuertoService {
         return ValidacionAeropuertoDataEnum.OK;
     }
 
+    public Object buscarPorAeropuertoId(Integer id) {
+        return repo.findByAeropuertoId(id);
+    }
+
 }

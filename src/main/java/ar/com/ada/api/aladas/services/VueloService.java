@@ -56,6 +56,10 @@ public class VueloService {
             return ValidacionVueloDataEnum.ERROR_PRECIO;
         if (!validarAeropuertoOrigenDiffDestino(vuelo))
             return ValidacionVueloDataEnum.ERROR_AEROPUERTOS_IGUALES;
+        if (!validarCapacidadMinima(vuelo))
+            return ValidacionVueloDataEnum.ERROR_CAPACIDAD_MINIMA;
+        if (!validarCapacidadMaxima(vuelo))
+            return ValidacionVueloDataEnum.ERROR_CAPACIDAD_MAXIMA;
         return ValidacionVueloDataEnum.OK;
     }
 
@@ -70,6 +74,22 @@ public class VueloService {
         return false;
     }
     
+    public boolean validarCapacidadMinima(Vuelo vuelo) { 
+
+        if (vuelo.getCapacidad() < 90) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validarCapacidadMaxima(Vuelo vuelo) {
+
+        if (vuelo.getCapacidad() > 389) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
         /*
          * if(vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen()) return true;
@@ -102,5 +122,9 @@ public class VueloService {
     public void eliminar(Integer id) {
         Vuelo vuelo = this.buscarPorId(id);
         repo.delete(vuelo);
+    }
+
+    public List<Vuelo> obtenerTodos() {
+        return repo.findAll();
     }
 }

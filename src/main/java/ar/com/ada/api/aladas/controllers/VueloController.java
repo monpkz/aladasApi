@@ -18,14 +18,6 @@ import ar.com.ada.api.aladas.services.VueloService.ValidacionVueloDataEnum;
 @RestController
 public class VueloController {
 
-    /*
-     * Version SIMPLE
-     * 
-     * @Autowired VueloService service;
-     * 
-     * @Autowired AeropuertoService aeropuertoService;
-     */
-
     // Version mas "pro"
     private VueloService service;
 
@@ -91,7 +83,7 @@ public class VueloController {
 
         // 4- devuelve el status final
         respuesta.isOk = true;
-        respuesta.message = "Actualizado";
+        respuesta.message = "El estado del vuelo ha sido actualizado.";
         respuesta.id = vuelo.getVueloId();
 
         return ResponseEntity.ok(respuesta);
@@ -103,16 +95,10 @@ public class VueloController {
         return ResponseEntity.ok(service.traerVuelosAbiertos());
     }
 
-    @DeleteMapping("/api/vuelos/{id}")
-    public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id) {
-
-        service.eliminar(id);
-        GenericResponse respuesta = new GenericResponse();
-
-        respuesta.isOk = true;
-        respuesta.message = "Vuelo eliminado con exito.";
-
-        return ResponseEntity.ok(respuesta);
+    @GetMapping("/api/vuelos")
+    public ResponseEntity<List<Vuelo>> getTodosVuelos() {
+        return ResponseEntity.ok(service.obtenerTodos());
     }
+
 
 }

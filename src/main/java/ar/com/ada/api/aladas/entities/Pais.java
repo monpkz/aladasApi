@@ -2,7 +2,7 @@ package ar.com.ada.api.aladas.entities;
 
 public class Pais {
     public enum PaisEnum {
-        ARGENTINA(32), ESTADOS_UNIDOS(840), VENEZUELA(862), COLOMBIA(170);
+        ARGENTINA(32), ESTADOS_UNIDOS(840), VENEZUELA(862), COLOMBIA(170), BRASIL(76), CHILE(152), ESPAÑA(724);
 
         private final Integer value;
 
@@ -26,7 +26,6 @@ public class Pais {
             return status;
         }
     }
-
 
     public enum TipoDocuEnum {
         DNI(1), PASAPORTE(2);
