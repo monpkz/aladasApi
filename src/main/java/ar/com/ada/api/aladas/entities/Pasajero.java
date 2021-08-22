@@ -3,6 +3,7 @@ package ar.com.ada.api.aladas.entities;
 import java.util.*;
 
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "pasajero")
@@ -12,6 +13,7 @@ public class Pasajero extends Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pasajeroId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reserva> reservas = new ArrayList<>();
 

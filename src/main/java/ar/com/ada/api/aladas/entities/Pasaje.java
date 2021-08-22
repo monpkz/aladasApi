@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "pasaje")
@@ -13,6 +15,7 @@ public class Pasaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pasajeId;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "reserva_id", referencedColumnName = "reserva_id")
     private Reserva reserva;

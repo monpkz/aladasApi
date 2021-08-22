@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ar.com.ada.api.aladas.entities.Pasaje;
 import ar.com.ada.api.aladas.models.request.InfoPasajeNuevo;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
-import ar.com.ada.api.aladas.models.response.PasajeResponse;
 import ar.com.ada.api.aladas.services.PasajeService;
-import ar.com.ada.api.aladas.services.PasajeService.ValidacionPasajeDataEnum;
 
 @RestController
 public class PasajeController {
@@ -24,38 +22,17 @@ public class PasajeController {
     PasajeService service;
 
     @PostMapping("api/pasajes")
-    public ResponseEntity<?> emitir(@RequestBody InfoPasajeNuevo infoPasajes) {
+    public ResponseEntity<GenericResponse> emitir(@RequestBody InfoPasajeNuevo infoPasajes) {
 
-        PasajeResponse respuesta = new PasajeResponse();
+        GenericResponse respuesta = new GenericResponse();
 
-        ValidacionPasajeDataEnum resultado = service.validar(infoPasajes.reservaId);
+        Pasaje pasaje = service.emitir(infoPasajes.reservaId);
 
-        if (resultado == ValidacionPasajeDataEnum.OK) {
+        respuesta.message = "El pasaje ha sido generado correctamente.";
+        respuesta.isOk = true;
+        respuesta.id = pasaje.getPasajeId();
 
-            Pasaje pasaje = service.emitir(infoPasajes.reservaId);
-
-            respuesta.pasajeId = pasaje.getPasajeId();
-            respuesta.fechaDeEmision = pasaje.getFechaEmision();
-            respuesta.reservaId = pasaje.getReserva().getReservaId();
-            respuesta.vueloId = pasaje.getReserva().getVuelo().getVueloId();
-            respuesta.infoDePago = "PAGADO";
-            respuesta.message = "El pasaje ha sido emitido correctamente.";
-
-            return ResponseEntity.ok(respuesta);
-
-        } else{
-
-            GenericResponse rta = new GenericResponse();
-            rta.isOk = false;
-            rta.message = "Error(" + resultado.toString() + ")";
-
-            return ResponseEntity.badRequest().body(rta);
-        }
+        return ResponseEntity.ok(respuesta);
     }
-
-    @GetMapping("/api/pasajes")
-    public ResponseEntity<List<Pasaje>> traerPasajes() {
-        return ResponseEntity.ok(service.obtenerTodos());
-    }
-
 }
+    

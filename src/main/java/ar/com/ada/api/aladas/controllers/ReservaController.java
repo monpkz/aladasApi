@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 import ar.com.ada.api.aladas.entities.Reserva;
 import ar.com.ada.api.aladas.entities.Usuario;
+import ar.com.ada.api.aladas.entities.Vuelo;
 import ar.com.ada.api.aladas.models.request.InfoReservaNueva;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
 import ar.com.ada.api.aladas.models.response.ReservaResponse;
 import ar.com.ada.api.aladas.services.ReservaService;
 import ar.com.ada.api.aladas.services.UsuarioService;
-import ar.com.ada.api.aladas.services.ReservaService.ValidacionReservaDataEnum;
+import ar.com.ada.api.aladas.services.VueloService;
+import ar.com.ada.api.aladas.services.VueloService.ValidacionVueloDataEnum;
 
 @RestController
 public class ReservaController {
@@ -27,39 +29,44 @@ public class ReservaController {
     UsuarioService usuarioService;
 
     @PostMapping("/api/reservas")
-    public ResponseEntity<?> generarReserva(@RequestBody InfoReservaNueva infoReserva){
-        ReservaResponse respuesta = new ReservaResponse();
+    public ResponseEntity<GenericResponse> generarReserva(@RequestBody InfoReservaNueva infoReserva) {
+        GenericResponse rta = new GenericResponse();
 
+        // Obtengo a quien esta autenticado del otro lado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // De lo que esta autenticado, obtengo su USERNAME
         String username = authentication.getName();
+
+        // Buscar el usuario por username
         Usuario usuario = usuarioService.buscarPorUsername(username);
 
-        ValidacionReservaDataEnum resultado = service.validar(infoReserva.vueloId);
+        // con el usuario, obtengo el pasajero, y con ese, obtengo el Id
+        Integer numeroReserva = service.generarReserva(infoReserva.vueloId, usuario.getPasajero().getPasajeroId());
 
-        if (resultado == ValidacionReservaDataEnum.OK) {
+        rta.id = numeroReserva;
+        rta.isOk = true;
+        rta.message = "Reserva creada";
 
-            Reserva reserva = service.generarReserva(infoReserva.vueloId, usuario.getPasajero().getPasajeroId());
+        return ResponseEntity.ok(rta);
 
-            respuesta.id = reserva.getReservaId();
-            respuesta.fechaDeEmision = reserva.getFechaEmision();
-            respuesta.fechaDeVencimiento = reserva.getFechaVencimiento();
-            respuesta.message = "Reserva creada con éxito.";
-
-            return ResponseEntity.ok(respuesta);
-
-        } else {
-            GenericResponse r = new GenericResponse();
-            r.isOk = false;
-            r.message = "Error(" + resultado.toString() + ")";
-
-            return ResponseEntity.badRequest().body(r);
-        }
     }
 
-    @GetMapping("/api/reservas")
+    /*@GetMapping("/api/reservas")
     public ResponseEntity<List<Reserva>> traerReservas() {
-        return ResponseEntity.ok(service.obtenerTodas());
+        return ResponseEntity.ok(service.obtenerTodos());
+    }*/
+
+    @GetMapping("/api/reservas/{id}")
+    public ResponseEntity<?> traerReservasPorId(@PathVariable Integer id) {
+        GenericResponse respuesta = new GenericResponse();
+        if (!service.validarReservaExiste(id)) {
+            respuesta.isOk = false;
+            respuesta.message = "El Id de la Reserva no es válido";
+            return ResponseEntity.badRequest().body(respuesta);
+        }
+        return ResponseEntity.ok(service.buscarPorId(id));
+
     }
 
-    
 }

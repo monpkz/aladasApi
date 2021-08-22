@@ -1,8 +1,6 @@
 package ar.com.ada.api.aladas.services;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class ReservaService {
     @Autowired
     PasajeroService pasajeroService;
 
-    public Reserva generarReserva(Integer vueloId, Integer pasajeroId) {
+    public Integer generarReserva(Integer vueloId, Integer pasajeroId) {
 
         Reserva reserva = new Reserva();
 
@@ -48,12 +46,23 @@ public class ReservaService {
         pasajero.agregarReserva(reserva);
         vuelo.agregarReserva(reserva);
 
-        return repo.save(reserva);
-    
+        repo.save(reserva);
+        return reserva.getReservaId();
     }
+
 
     public Reserva buscarPorId(Integer id) {
         return repo.findByReservaId(id);
+    }
+
+
+
+    public boolean validarReservaExiste(Integer id) {
+        Reserva reserva = repo.findByReservaId(id);
+        if (reserva != null) {
+            return true;
+        } else
+            return false;
     }
 
     public enum ValidacionReservaDataEnum {
@@ -71,27 +80,37 @@ public class ReservaService {
 
     }
 
-    public boolean validarVueloAbierto(Integer id) {
+    private boolean validarVueloAbierto(Integer id) {
         Vuelo vuelo = vueloService.buscarPorId(id);
         if (vuelo.getEstadoVueloId().equals(EstadoVueloEnum.ABIERTO)) {
             return true;
         }
         return false;
-
     }
 
-    public List<Reserva> obtenerTodas() {
-       return repo.findAll();
+    public Reserva modificarReserva(Integer id) {
+        Reserva reserva = this.buscarPorId(id);
+        Vuelo vuelo = vueloService.buscarPorId(id);
+        reserva.setVuelo(vuelo);
+        reserva.setFechaEmision(new Date());
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(reserva.getFechaEmision());
+        c.add(Calendar.DATE, 1);
+
+        reserva.setFechaVencimiento(c.getTime());
+
+        return repo.save(reserva)
+
+        ;
     }
 
-    public boolean validarReservaExiste(Integer id) {
-        Reserva reserva = repo.findByReservaId(id);
-        if (reserva != null) {
-            return true;
-        } else
-            return false;
+    public void eliminarReservaPorId(Integer id) {
+        repo.deleteById(id);
     }
-    
 
 
+    public List<Reserva> obtenerTodos() {
+        return repo.findAll();
+    }
 }
