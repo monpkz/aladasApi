@@ -49,24 +49,6 @@ public class VueloController {
         }
     }
 
-    /*
-     * Version 2 Post
-     * 
-     * @PostMapping("/api/v2/vuelos") public ResponseEntity<GenericResponse>
-     * postCrearVueloV2(@RequestBody Vuelo vuelo) { GenericResponse respuesta = new
-     * GenericResponse();
-     * 
-     * Aeropuerto ao = aeropuertoService.b
-     * 
-     * Vuelo vueloCreado = service.crear(vuelo.getFecha(), vuelo.getCapacidad(),
-     * vuelo.getAeropuertoOrigen(), vuelo.getAeropuertoDestino(), vuelo.getPrecio(),
-     * vuelo.getCodigoMoneda());
-     * 
-     * respuesta.isOk = true; respuesta.id = vueloCreado.getVueloId();
-     * respuesta.message = "Vuelo creado correctamente";
-     * 
-     * return ResponseEntity.ok(respuesta); }
-     */
 
     @PutMapping("/api/vuelos/{id}/estados")
     public ResponseEntity<GenericResponse> putActualizarEstadoVuelo(@PathVariable Integer id,
