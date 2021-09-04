@@ -52,11 +52,6 @@ public class ReservaController {
 
     }
 
-    /*@GetMapping("/api/reservas")
-    public ResponseEntity<List<Reserva>> traerReservas() {
-        return ResponseEntity.ok(service.obtenerTodos());
-    }*/
-
     @GetMapping("/api/reservas/{id}")
     public ResponseEntity<?> traerReservasPorId(@PathVariable Integer id) {
         GenericResponse respuesta = new GenericResponse();
