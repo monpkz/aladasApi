@@ -4,5 +4,5 @@ Proyecto de API Rest para una aerolinea que permite registrar un usuario ya sea 
 
 Se puede hacer el registro de usuario, login y crear y ver reservas mediante postman, aca la documentacion de cada ruta -> https://documenter.getpostman.com/view/16170614/U16ewUJr
 
-🔨 Creada usando JAVA11, SpringBoot, MySql, JWTToken y MailGun API.
+💻⚙️ Creada usando JAVA11, SpringBoot, MySql, JWTToken y MailGun API.
 y el deploy en Heroku, Postgres.
